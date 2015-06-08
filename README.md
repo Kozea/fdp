@@ -22,7 +22,7 @@ Martins Jean-Marc
 ## License
 
 ```
-pdftool Copyright (C) 2014 Jean-Marc MARTINS, Kozea
+FDP Copyright (C) 2014 Jean-Marc MARTINS, Kozea
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
