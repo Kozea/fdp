@@ -1,5 +1,5 @@
 {
-  "name": "pdftool",
+  "name": "fdp",
   "version": "0.0.0",
   "description": "pdf operations tool",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/cristen/pdftool.git"
+    "url": "git://github.com/Kozea/fdp.git"
   },
   "author": "Martins Jean-marc, Kozea",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/cristen/pdftool/issues"
+    "url": "https://github.com/Kozea/fdp/issues"
   },
-  "homepage": "https://github.com/cristen/pdftool",
+  "homepage": "https://github.com/Kozea/fdp",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-coffeelint": "0.0.10",

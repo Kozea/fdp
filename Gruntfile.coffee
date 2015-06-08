@@ -9,26 +9,26 @@ module.exports = (grunt) ->
         banner: '/*! <%= pkg.name %>
           <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 
-      pdftool:
+      fdp:
         files:
-          'pdftool/static/js/pdftool.min.js': ['pdftool/static/js/pdftool.js']
+          'fdp/static/js/fdp.min.js': ['fdp/static/js/fdp.js']
 
     coffee:
-      pdftool:
+      fdp:
         options:
           bare: true
           join: true
           sourceMap: true
 
         files:
-          'pdftool/static/js/pdftool.js': coffees
+          'fdp/static/js/fdp.js': coffees
 
     coffeelint:
       options:
         no_backticks:
           level: 'ignore'
 
-      pdftool: coffees
+      fdp: coffees
 
     watch:
       options:
@@ -43,6 +43,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
 
-  grunt.registerTask 'default', ['coffeelint', 'coffee', 'uglify:pdftool']
-  grunt.registerTask 'js', ['coffeelint', 'coffee', 'uglify:pdftool']
-  grunt.registerTask 'dev', ['coffeelint', 'coffee', 'uglify:pdftool', 'watch']
+  grunt.registerTask 'default', ['coffeelint', 'coffee', 'uglify:fdp']
+  grunt.registerTask 'js', ['coffeelint', 'coffee', 'uglify:fdp']
+  grunt.registerTask 'dev', ['coffeelint', 'coffee', 'uglify:fdp', 'watch']
