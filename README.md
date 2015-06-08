@@ -1,6 +1,6 @@
-# pdftool
+# FDP
 
-## description
+## Description
 
 This project provides a web tool to work with pdf files (you can rotate or merge pdfs).
 
