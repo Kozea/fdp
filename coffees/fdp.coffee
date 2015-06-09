@@ -19,7 +19,8 @@ $(document).ready ->
         closeBtnInside: true
 
     handleRemove = () ->
-      $("#sortable").on 'click', ".fa-minus-square", () ->
+      $("#sortable").on 'click', ".fa-minus-square", (e) ->
+        e.stopPropagation()
         if confirm("Êtes-vous certain de vouloir supprimer cette page ?")
           $(@).parent().remove()
           updatePagesPosition()
@@ -34,7 +35,8 @@ $(document).ready ->
         )
 
     handleRotation = () ->
-      $('#sortable').on 'click', '.fa-undo', () ->
+      $('#sortable').on 'click', '.fa-undo', (e) ->
+        e.stopPropagation()
         rotation = $(@).parent().data('rotation') || 0
         rotation -= 90
         $(@).parent().data 'rotation', rotation
@@ -45,7 +47,8 @@ $(document).ready ->
           "transform": "rotate(#{rotation}deg)"
         updatePagesPosition()
 
-      $('#sortable').on 'click', '.fa-repeat', () ->
+      $('#sortable').on 'click', '.fa-repeat', (e) ->
+        e.stopPropagation()
         rotation = $(@).parent().data('rotation') || 0
         rotation += 90
         $(@).parent().data 'rotation', rotation

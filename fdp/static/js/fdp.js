@@ -26,7 +26,8 @@ $(document).ready(function() {
       });
     };
     handleRemove = function() {
-      return $("#sortable").on('click', ".fa-minus-square", function() {
+      return $("#sortable").on('click', ".fa-minus-square", function(e) {
+        e.stopPropagation();
         if (confirm("Êtes-vous certain de vouloir supprimer cette page ?")) {
           $(this).parent().remove();
           return updatePagesPosition();
@@ -49,8 +50,9 @@ $(document).ready(function() {
       return _results;
     };
     handleRotation = function() {
-      $('#sortable').on('click', '.fa-undo', function() {
+      $('#sortable').on('click', '.fa-undo', function(e) {
         var rotation;
+        e.stopPropagation();
         rotation = $(this).parent().data('rotation') || 0;
         rotation -= 90;
         $(this).parent().data('rotation', rotation);
@@ -62,8 +64,9 @@ $(document).ready(function() {
         });
         return updatePagesPosition();
       });
-      return $('#sortable').on('click', '.fa-repeat', function() {
+      return $('#sortable').on('click', '.fa-repeat', function(e) {
         var rotation;
+        e.stopPropagation();
         rotation = $(this).parent().data('rotation') || 0;
         rotation += 90;
         $(this).parent().data('rotation', rotation);
