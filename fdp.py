@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import tornado.options
 import tornado.ioloop
 import tornado.httpserver
