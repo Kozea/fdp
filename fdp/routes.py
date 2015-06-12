@@ -34,8 +34,10 @@ class Merge(Route):
                     self.get_argument("pages[%d]['rotation']" % x) or 0)
                 for name in bodies:
                     if name == pageparent:
-                        page = PdfFileReader(
-                            image2Pdf(bodies.get(name))).getPage(pagenum)
+                        pdf = PdfFileReader(image2Pdf(bodies.get(name)))
+                        if pdf.isEncrypted:
+                            pdf.decrypt("")
+                        page = pdf.getPage(pagenum)
                         if rotation and rotation != 0:
                             method = ('rotateClockwise' if rotation > 0
                                       else 'rotateCounterClockwise')
@@ -59,6 +61,13 @@ class Preview(Route):
             pdf = image2Pdf(pdf.body)
             pdf.body = pdf.read()
         _file = PdfFileReader(BytesIO(pdf.body))
+        if _file.isEncrypted:
+            try:
+                _file.decrypt("")
+            except NotImplementedError:
+                return self.write(json_encode(
+                    {'error': "Ce PDF utilise une méthode de cryptage qui "
+                     "n’est pas encore supportée."}))
         numpages = _file.getNumPages()
         output = {}
         for i in range(numpages):

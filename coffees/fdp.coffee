@@ -84,6 +84,7 @@ $(document).ready ->
           processData: false
           contentType: false
           data: data
+          dataType: "json"
           xhrFields:
             onprogress: (e) ->
               if e.lengthComputable
@@ -93,22 +94,25 @@ $(document).ready ->
                     .text("#{e.loaded / e.total * 100} %")
           success: (data, textStatus, errors) ->
             for index, bytes of data
-              byteCharacters = atob(bytes)
-              byteNumbers = new Array(byteCharacters.length)
-              for el, i in byteNumbers
-                byteNumbers[i] = byteCharacters.charCodeAt(i)
-              byteArray = new Uint8Array(byteNumbers)
-              blob = new Blob([byteArray], {type: 'application/pdf'})
-              url = window.URL.createObjectURL(blob)
-              $('#files ul').append "<li class='pdf_thumbnail'
-                data-filename='#{filename}' data-pagenum='#{index}'>" +
-                "<img src='#{url}' class='thumbnail'/>" +
-                '<i class="fa fa-minus-square"></i>' +
-                '<i class="fa fa-undo"></i>' +
-                '<i class="fa fa-repeat"></i>' +
-                '</li>'
-            $('#completion').fadeOut()
-            updatePagesPosition()
+              if data.error
+                alert data.error
+              else
+                byteCharacters = atob(bytes)
+                byteNumbers = new Array(byteCharacters.length)
+                for el, i in byteNumbers
+                  byteNumbers[i] = byteCharacters.charCodeAt(i)
+                byteArray = new Uint8Array(byteNumbers)
+                blob = new Blob([byteArray], {type: 'application/pdf'})
+                url = window.URL.createObjectURL(blob)
+                $('#files ul').append "<li class='pdf_thumbnail'
+                  data-filename='#{filename}' data-pagenum='#{index}'>" +
+                  "<img src='#{url}' class='thumbnail'/>" +
+                  '<i class="fa fa-minus-square"></i>' +
+                  '<i class="fa fa-undo"></i>' +
+                  '<i class="fa fa-repeat"></i>' +
+                  '</li>'
+              $('#completion').fadeOut()
+              updatePagesPosition()
         files_array.push(files[index])
 
 
