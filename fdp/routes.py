@@ -34,7 +34,7 @@ class Merge(Route):
                     self.get_argument("pages[%d]['rotation']" % x) or 0)
                 for name in bodies:
                     if name == pageparent:
-                        pdf = PdfFileReader(image2Pdf(bodies.get(name)))
+                        pdf = PdfFileReader(BytesIO(bodies.get(name)))
                         if pdf.isEncrypted:
                             pdf.decrypt("")
                         page = pdf.getPage(pagenum)
@@ -77,7 +77,7 @@ class Preview(Route):
             tmp = BytesIO()
             writer.write(tmp)
             tmp.seek(0)
-            image = pdf2png(tmp, (300, 300))
+            image = pdf2png(tmp, 300)
             image.seek(0)
             output[i] = b64encode(image.read()).decode('utf-8')
         self.set_header("Content-Type", "application/json")
@@ -87,9 +87,8 @@ class Preview(Route):
 def image2Pdf(pdf):
     """Converts an image to a pdf and returns it's fd."""
     output = BytesIO()
-    with Image(file=BytesIO(pdf)) as img:
+    with Image(file=BytesIO(pdf), resolution=300) as img:
         img.format = 'pdf'
-        img.save(filename='/tmp/test.pdf')
         img.save(file=output)
     output.flush()
     output.seek(0)
