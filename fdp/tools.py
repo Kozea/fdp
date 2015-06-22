@@ -3,12 +3,8 @@ Various useful helpers.
 
 """
 
-from PIL import ExifTags
 from io import BytesIO
 from wand.image import Image
-
-
-TAGS = {value: key for key, value in list(ExifTags.TAGS.items())}
 
 
 def pdf2png(pdf, size):
