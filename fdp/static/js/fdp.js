@@ -1,222 +1,26 @@
-var files_array, pages_array;
+var files;
 
-$.event.props.push('dataTransfer');
-
-files_array = [];
-
-pages_array = [];
+files = [];
 
 $(document).ready(function() {
-  var backwardUpload, handleDragOver, handleFileSelect, handleImgClick, handleRemove, handleRotation, startUpload, updatePagesPosition;
-  if (window.File && window.FileReader && window.FileList && window.Blob) {
-    backwardUpload = function(e) {
-      return $('#hidden-uploader').click();
-    };
-    handleImgClick = function(e) {
-      var img, src;
-      src = $(e.target).attr('src');
-      img = e.target.cloneNode(true);
-      img = $(img).removeClass('thumbnail')[0];
-      return $(e.target).magnificPopup({
-        items: {
-          src: "<div class='centered'>" + img.outerHTML + "</div>",
-          type: 'inline'
-        },
-        closeBtnInside: true
-      });
-    };
-    handleRemove = function() {
-      return $("#sortable").on('click', ".fa-minus-square", function(e) {
-        e.stopPropagation();
-        if (confirm("Êtes-vous certain de vouloir supprimer cette page ?")) {
-          $(this).parent().remove();
-          return updatePagesPosition();
-        }
-      });
-    };
-    updatePagesPosition = function() {
-      var element, i, _i, _len, _ref, _results;
-      pages_array = [];
-      _ref = $('#sortable li');
-      _results = [];
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        element = _ref[i];
-        _results.push(pages_array.push({
-          filename: $(element).data('filename'),
-          page: $(element).data('pagenum'),
-          rotation: $(element).data('rotation') || 0
-        }));
+  return Dropzone.options.uploader = {
+    createImageThumbnails: false,
+    previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n\n\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Error</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">\n          <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>\n        </g>\n      </g>\n    </svg>\n  </div>\n</div>",
+    success: function(file, response) {
+      var File, f, json, _i, _len;
+      json = $.parseJSON(response);
+      for (_i = 0, _len = json.length; _i < _len; _i++) {
+        f = json[_i];
+        File = {
+          name: f.name,
+          content: f.content,
+          type: f.type
+        };
+        files.push(File);
       }
-      return _results;
-    };
-    handleRotation = function() {
-      $('#sortable').on('click', '.fa-undo', function(e) {
-        var rotation;
-        e.stopPropagation();
-        rotation = $(this).parent().data('rotation') || 0;
-        rotation -= 90;
-        $(this).parent().data('rotation', rotation);
-        $(this).siblings('img').css({
-          "-webkit-transform": "rotate(" + rotation + "deg)",
-          "-moz-transform": "rotate(" + rotation + "deg)",
-          "-ms-transform": "rotate(" + rotation + "deg)",
-          "transform": "rotate(" + rotation + "deg)"
-        });
-        return updatePagesPosition();
-      });
-      return $('#sortable').on('click', '.fa-repeat', function(e) {
-        var rotation;
-        e.stopPropagation();
-        rotation = $(this).parent().data('rotation') || 0;
-        rotation += 90;
-        $(this).parent().data('rotation', rotation);
-        $(this).siblings('img').css({
-          "-webkit-transform": "rotate(" + rotation + "deg)",
-          "-moz-transform": "rotate(" + rotation + "deg)",
-          "-ms-transform": "rotate(" + rotation + "deg)",
-          "transform": "rotate(" + rotation + "deg)"
-        });
-        return updatePagesPosition();
-      });
-    };
-    handleFileSelect = function(evt) {
-      var files, _ref;
-      evt.stopPropagation();
-      evt.preventDefault();
-      files = ((_ref = evt.dataTransfer) != null ? _ref.files : void 0) || this.files;
-      $('#drop').remove();
-      $('#sortable').sortable({
-        placeholder: 'ui-sortable-placeholder',
-        start: function(e, ui) {
-          return $(this).attr('data-previndex', ui.item.index());
-        },
-        update: function(e, ui) {
-          return updatePagesPosition();
-        }
-      });
-      return $.each(files, function(index, value) {
-        var data, filename;
-        data = new FormData();
-        data.append('file', files[index]);
-        filename = files[index].name;
-        $.ajax({
-          url: $("#upload-button").data('preview-url'),
-          type: 'POST',
-          cache: false,
-          processData: false,
-          contentType: false,
-          data: data,
-          dataType: "json",
-          xhrFields: {
-            onprogress: function(e) {
-              if (e.lengthComputable) {
-                return $('#completion').progressbar({
-                  value: e.loaded / e.total * 100,
-                  change: $('#progress-label').text("" + (e.loaded / e.total * 100) + " %")
-                });
-              }
-            }
-          },
-          success: function(data, textStatus, errors) {
-            var blob, byteArray, byteCharacters, byteNumbers, bytes, el, i, url, _i, _len, _results;
-            _results = [];
-            for (index in data) {
-              bytes = data[index];
-              if (data.error) {
-                alert(data.error);
-              } else {
-                byteCharacters = atob(bytes);
-                byteNumbers = new Array(byteCharacters.length);
-                for (i = _i = 0, _len = byteNumbers.length; _i < _len; i = ++_i) {
-                  el = byteNumbers[i];
-                  byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                byteArray = new Uint8Array(byteNumbers);
-                blob = new Blob([byteArray], {
-                  type: 'application/pdf'
-                });
-                url = window.URL.createObjectURL(blob);
-                $('#files ul').append(("<li class='pdf_thumbnail' data-filename='" + filename + "' data-pagenum='" + index + "'>") + ("<img src='" + url + "' class='thumbnail'/>") + '<i class="fa fa-minus-square"></i>' + '<i class="fa fa-undo"></i>' + '<i class="fa fa-repeat"></i>' + '</li>');
-              }
-              $('#completion').fadeOut();
-              _results.push(updatePagesPosition());
-            }
-            return _results;
-          }
-        });
-        return files_array.push(files[index]);
-      });
-    };
-    handleDragOver = function(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-      return evt.dataTransfer.dropEffect = 'copy';
-    };
-    startUpload = function(evt) {
-      var data, el, i, _i, _j, _len, _len1;
-      evt.stopPropagation();
-      evt.preventDefault();
-      data = new FormData();
-      for (i = _i = 0, _len = files_array.length; _i < _len; i = ++_i) {
-        el = files_array[i];
-        data.append('files[]', el);
-      }
-      for (i = _j = 0, _len1 = pages_array.length; _j < _len1; i = ++_j) {
-        el = pages_array[i];
-        data.append("pages[" + i + "]['filename']", el.filename);
-        data.append("pages[" + i + "]['pagenum']", el.page);
-        data.append("pages[" + i + "]['rotation']", el.rotation);
-      }
-      return $.ajax({
-        url: $(this).data('url'),
-        type: 'POST',
-        cache: false,
-        processData: false,
-        contentType: false,
-        data: data,
-        beforeSend: function() {
-          $('#url').hide();
-          $('#url').css('margin-bottom', "-100px");
-          return $('.loading').show();
-        },
-        success: function(data, textStatus, errors) {
-          var blob, byteArray, byteCharacters, byteNumbers, url, _k, _len2;
-          if (data) {
-            byteCharacters = atob(data);
-            byteNumbers = new Array(byteCharacters.length);
-            for (i = _k = 0, _len2 = byteNumbers.length; _k < _len2; i = ++_k) {
-              el = byteNumbers[i];
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            byteArray = new Uint8Array(byteNumbers);
-            blob = new Blob([byteArray], {
-              type: 'application/pdf'
-            });
-            url = window.URL.createObjectURL(blob);
-            $("#url").attr('href', url);
-            $('#url').show();
-            $("#url").animate({
-              'margin-bottom': '0'
-            }, 500);
-          }
-          return $('.loading').hide(1000);
-        }
-      });
-    };
-  } else {
-    alert('Your browser is outdated. Please consider upgrading to a newer one.');
-  }
-  $('#files').bind('dragover', handleDragOver);
-  $('#files').bind('drop', handleFileSelect);
-  $('#files').bind('click', backwardUpload);
-  $('#upload-button').bind('click', startUpload);
-  $('#hidden-uploader').bind('change', handleFileSelect);
-  $('#files').on('click', '*', function(e) {
-    return e.stopPropagation();
-  });
-  $('#files').on('click mouseenter', '.thumbnail', handleImgClick);
-  handleRemove();
-  return handleRotation();
+      debugger;
+    }
+  };
 });
 
 //# sourceMappingURL=fdp.js.map

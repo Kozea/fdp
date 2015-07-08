@@ -1,7 +1,10 @@
 from . import url, Route
 from .tools import pdf2png
+from .pdf import Picture, PDF
+from tempfile import NamedTemporaryFile
 from io import BytesIO
 from base64 import b64encode
+from binascii import b2a_base64, a2b_base64
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from wand.image import Image
 from tornado.escape import json_encode
@@ -82,6 +85,23 @@ class Preview(Route):
             output[i] = b64encode(image.read()).decode('utf-8')
         self.set_header("Content-Type", "application/json")
         return self.write(json_encode(output))
+
+
+@url('/upload')
+class Upload(Route):
+    def post(self):
+        files = []
+        for fn in self.request.files['file']:
+            if fn.content_type != 'application/pdf':
+                img = Picture()
+                img.populate_from_stream(fn)
+                obj = img.toPDF()
+            else:
+                obj = PDF(fn.body)
+            import wdb
+            wdb.set_trace()
+            files.append(obj)
+        return self.write(json_encode(files))
 
 
 def image2Pdf(pdf):

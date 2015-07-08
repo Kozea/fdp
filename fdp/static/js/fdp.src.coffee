@@ -169,3 +169,6 @@ $(document).ready ->
 
   handleRemove()
   handleRotation()
+
+$(document).ready ->
+  console.log 'lol'

@@ -209,3 +209,7 @@ li i.fa-undo {
 .fa {
   cursor: pointer;
 }
+
+#hidden-uploader {
+  display: none;
+}
