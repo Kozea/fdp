@@ -10,6 +10,8 @@
     <link href="{{ static_url('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ static_url('css/magnific-popup.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ static_url('css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <body {% if options.debug %}data-debug="true"{% end %}>
     <h1>Fdp</h1>
@@ -19,7 +21,10 @@
     <script src="{{ static_url('js/jquery.min.js') }}"></script>
     <script src="{{ static_url('js/jquery-ui.min.js') }}"></script>
     <script src="{{ static_url('js/magnific-popup.min.js') }}"></script>
+    <script src="{{ static_url('js/deps.min.js') }}"></script>
     <script src="{% if options.debug %}{{ static_url('js/fdp.js') }}{% else %}{{ static_url('js/fdp.min.js') }}{% end %}"></script>
     <script src="{{ static_url('js/dropzone.js') }}"></script>
+
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
   </body>
 </html>

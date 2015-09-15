@@ -1,0 +1,15 @@
+{
+  "name": "jquery.shapeshift",
+  "homepage": "https://github.com/McPants/jquery.shapeshift",
+  "version": "2.0.0",
+  "_release": "2.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.0",
+    "commit": "2ca51ad57d6154efae7bd77d043e50edbf1939d6"
+  },
+  "_source": "git://github.com/McPants/jquery.shapeshift.git",
+  "_target": "~2.0.0",
+  "_originalSource": "jquery.shapeshift",
+  "_direct": true
+}

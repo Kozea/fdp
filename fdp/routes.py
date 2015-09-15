@@ -1,6 +1,6 @@
 from . import url, Route
 from .tools import pdf2png
-from .pdf import Picture, PDF
+from .pdf import Picture, PDF, JSONPDFEncoder
 from tempfile import NamedTemporaryFile
 from io import BytesIO
 from base64 import b64encode
@@ -98,10 +98,8 @@ class Upload(Route):
                 obj = img.toPDF()
             else:
                 obj = PDF(fn.body)
-            import wdb
-            wdb.set_trace()
             files.append(obj)
-        return self.write(json_encode(files))
+        return self.write(JSONPDFEncoder().encode(files))
 
 
 def image2Pdf(pdf):

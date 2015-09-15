@@ -84,12 +84,12 @@ li i.fa-undo {
 #progress-label {
   margin: 0 auto;
   position: absolute;
-  top: 10px;
+  top: 10px 0;
   left: 50%;
 }
 
 #url {
-  bottom: 10px;
+  bottom: 10px 0;
   left: 50%;
   margin-bottom: -100px;
   position: fixed;
@@ -212,4 +212,28 @@ li i.fa-undo {
 
 #hidden-uploader {
   display: none;
+}
+
+.target {
+  background-color: #CDB;
+  position: relative;
+  margin: 10px 0;
+  min-height: 100px;
+  width: 100%;
+}
+
+.source {
+  background-color: #BBB;
+  margin: 10px 0;
+  min-height: 100px;
+  width: 100%;
+}
+
+.download {
+  margin: 0 auto;
+  width: 60px;
+}
+
+.pdf-page {
+  float: left;
 }
