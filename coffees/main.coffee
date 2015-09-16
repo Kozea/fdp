@@ -4,8 +4,13 @@ class PDF
     @pages = pages
 
 class Page
-  constructor: (id, thumbnail) ->
+  rotation: 0
+  mirror: 0
+
+  constructor: (id, global_order, parent, thumbnail) ->
     @id = id
+    @global_order = global_order
+    @parent = parent
     @thumbnail = thumbnail
 
 pdfs = []
@@ -24,7 +29,7 @@ $(document).ready ->
         for id, thumb of pdf.pages
           div = $('<div>')
           img = $('<img/>', {
-            "data-page": "page#{id}"
+            "data-id": id
             "data-pdf": pdf.name
             src: "data:image/png;base64,#{thumb}"
           })
@@ -53,8 +58,52 @@ $(document).ready ->
       copyHelper = null
 
   $('.download').click () ->
-    for i, element of $('.target').children()
-      parent = $(element).children('img').data 'pdf'
-      debugger
-      pdf = new Page(i, parent)
+    pages_order = {pdfs_list: [], order: {}}
+    pdfs_list = []
+    for element, i in $('.target').children()
+      img = $(element).children('img')
+      id = img.data 'id'
+      parent = img.data 'pdf'
+      thumbnail = img.attr 'src'
+      pdf = new Page(id, i, parent, thumbnail)
+      pages_order.order[i] = {pdf: parent, id: id}
+      pdfs_list.push pdf.parent
+    clean_pdfs_list = $.unique(pdfs_list)
+    pages_order.pdfs_list = clean_pdfs_list
+    console.log pages_order
+
+    $.ajax
+      url: $(@).data 'url'
+      type: 'POST'
+      cache: false
+      processData: false
+      contentType: false
+      data: JSON.stringify(pages_order)
+      success: (data, textStatus, errors) ->
+        blob = b64toBlob(data)
+        url = window.URL.createObjectURL(blob)
+        a = $("<a>")
+        a.attr 'href', url
+        a.attr 'download', "pdf.pdf"
+        a[0].click()
+        window.URL.revokeObjectURL(url)
     return
+
+b64toBlob = (b64Data, contentType, sliceSize) ->
+  contentType = contentType or ''
+  sliceSize = sliceSize or 512
+  byteCharacters = atob(b64Data)
+  byteArrays = []
+  offset = 0
+  while offset < byteCharacters.length
+    slice = byteCharacters.slice(offset, offset + sliceSize)
+    byteNumbers = new Array(slice.length)
+    i = 0
+    while i < slice.length
+      byteNumbers[i] = slice.charCodeAt(i)
+      i++
+    byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push byteArray
+    offset += sliceSize
+  blob = new Blob(byteArrays, type: contentType)
+  blob

@@ -3,8 +3,9 @@ Module that provides classes useful to work with PDF objects.
 
 """
 import json
-from base64 import b64decode, b64encode
+from base64 import b64encode
 from PyPDF2 import PdfFileReader, PdfFileWriter
+from tempfile import NamedTemporaryFile
 from io import BytesIO
 from wand.image import Image
 
@@ -24,6 +25,14 @@ class File(object):
     data = None
     thumbnail = None
 
+    def saveToTemp(self):
+        """Keeps tmp track of the file to reconstruct it later."""
+        f = NamedTemporaryFile(delete=False)
+        with open(f.name, 'wb') as fd:
+            fd.write(self.data)
+            fd.seek(0)
+        return f
+
 
 class PDF(File, PdfFileReader):
     """Represents a PDF."""
@@ -39,10 +48,12 @@ class PDF(File, PdfFileReader):
         :bytes data: self explanatory
 
         """
+        self.data = data
         self.thumbnail = thumbnail
         self.reader = PdfFileReader(BytesIO(data))
         self.num_pages = self.reader.getNumPages()
-        self.title = self.reader.getDocumentInfo().title
+        tmpfile = self.saveToTemp()
+        self.title = tmpfile.name
         self.pages = dict(
             (i, x) for i, x in enumerate(self.reader.pages, start=1))
         self.generate_thumbs()

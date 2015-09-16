@@ -1,4 +1,4 @@
-var PDF, Page, pdfs;
+var PDF, Page, b64toBlob, pdfs;
 
 PDF = (function() {
   function PDF(name, pages) {
@@ -11,8 +11,14 @@ PDF = (function() {
 })();
 
 Page = (function() {
-  function Page(id, thumbnail) {
+  Page.prototype.rotation = 0;
+
+  Page.prototype.mirror = 0;
+
+  function Page(id, global_order, parent, thumbnail) {
     this.id = id;
+    this.global_order = global_order;
+    this.parent = parent;
     this.thumbnail = thumbnail;
   }
 
@@ -44,7 +50,7 @@ $(document).ready(function() {
             thumb = _ref[id];
             div = $('<div>');
             img = $('<img/>', {
-              "data-page": "page" + id,
+              "data-id": id,
               "data-pdf": pdf.name,
               src: "data:image/png;base64," + thumb
             });
@@ -87,15 +93,73 @@ $(document).ready(function() {
     }
   });
   return $('.download').click(function() {
-    var element, i, parent, pdf, _ref;
+    var clean_pdfs_list, element, i, id, img, pages_order, parent, pdf, pdfs_list, thumbnail, _i, _len, _ref;
+    pages_order = {
+      pdfs_list: [],
+      order: {}
+    };
+    pdfs_list = [];
     _ref = $('.target').children();
-    for (i in _ref) {
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       element = _ref[i];
-      parent = $(element).children('img').data('pdf');
-      debugger;
-      pdf = new Page(i, parent);
+      img = $(element).children('img');
+      id = img.data('id');
+      parent = img.data('pdf');
+      thumbnail = img.attr('src');
+      pdf = new Page(id, i, parent, thumbnail);
+      pages_order.order[i] = {
+        pdf: parent,
+        id: id
+      };
+      pdfs_list.push(pdf.parent);
     }
+    clean_pdfs_list = $.unique(pdfs_list);
+    pages_order.pdfs_list = clean_pdfs_list;
+    console.log(pages_order);
+    $.ajax({
+      url: $(this).data('url'),
+      type: 'POST',
+      cache: false,
+      processData: false,
+      contentType: false,
+      data: JSON.stringify(pages_order),
+      success: function(data, textStatus, errors) {
+        var a, blob, url;
+        blob = b64toBlob(data);
+        url = window.URL.createObjectURL(blob);
+        a = $("<a>");
+        a.attr('href', url);
+        a.attr('download', "pdf.pdf");
+        a[0].click();
+        return window.URL.revokeObjectURL(url);
+      }
+    });
   });
 });
+
+b64toBlob = function(b64Data, contentType, sliceSize) {
+  var blob, byteArray, byteArrays, byteCharacters, byteNumbers, i, offset, slice;
+  contentType = contentType || '';
+  sliceSize = sliceSize || 512;
+  byteCharacters = atob(b64Data);
+  byteArrays = [];
+  offset = 0;
+  while (offset < byteCharacters.length) {
+    slice = byteCharacters.slice(offset, offset + sliceSize);
+    byteNumbers = new Array(slice.length);
+    i = 0;
+    while (i < slice.length) {
+      byteNumbers[i] = slice.charCodeAt(i);
+      i++;
+    }
+    byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+    offset += sliceSize;
+  }
+  blob = new Blob(byteArrays, {
+    type: contentType
+  });
+  return blob;
+};
 
 //# sourceMappingURL=fdp.js.map
