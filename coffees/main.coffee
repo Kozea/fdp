@@ -55,6 +55,8 @@ $(document).ready ->
       ui.item.removeAttr 'data-previndex'
     receive: (e, ui) ->
       ui.item.addClass 'pdf-page'
+      $('.rotate-left:first').clone().removeClass('hidden').prependTo ui.item
+      $('.rotate-right:first').clone().removeClass('hidden').appendTo ui.item
       copyHelper = null
 
   $('.download').click () ->
@@ -64,13 +66,13 @@ $(document).ready ->
       img = $(element).children('img')
       id = img.data 'id'
       parent = img.data 'pdf'
+      rotation = Number.parseInt(img.attr('data-rotation')) or 0
       thumbnail = img.attr 'src'
       pdf = new Page(id, i, parent, thumbnail)
-      pages_order.order[i] = {pdf: parent, id: id}
+      pages_order.order[i] = {pdf: parent, id: id, rotation: rotation}
       pdfs_list.push pdf.parent
     clean_pdfs_list = $.unique(pdfs_list)
     pages_order.pdfs_list = clean_pdfs_list
-    console.log pages_order
 
     $.ajax
       url: $(@).data 'url'
@@ -88,6 +90,32 @@ $(document).ready ->
         a[0].click()
         window.URL.revokeObjectURL(url)
     return
+
+$(document).on 'click', '.rotate-left', (e) ->
+  img = $(e.target).siblings('img').first()
+  rotation = img.attr('data-rotation') or 0
+  rotation = Number.parseInt(rotation)
+  rotation -= 90
+  rotation = -(Math.abs(rotation) % 360)
+  img.css
+    "-webkit-transform": "rotate(#{rotation}deg)"
+    "-moz-transform": "rotate(#{rotation}deg)"
+    "-ms-transform": "rotate(#{rotation}deg)"
+    "transform": "rotate(#{rotation}deg)"
+  img.attr 'data-rotation', rotation
+
+$(document).on 'click', '.rotate-right', (e) ->
+  img = $(e.target).siblings('img').first()
+  rotation = img.attr('data-rotation') or 0
+  rotation = Number.parseInt(rotation)
+  rotation += 90
+  rotation = rotation % 360
+  img.css
+    "-webkit-transform": "rotate(#{rotation}deg)"
+    "-moz-transform": "rotate(#{rotation}deg)"
+    "-ms-transform": "rotate(#{rotation}deg)"
+    "transform": "rotate(#{rotation}deg)"
+  img.attr 'data-rotation', rotation
 
 b64toBlob = (b64Data, contentType, sliceSize) ->
   contentType = contentType or ''

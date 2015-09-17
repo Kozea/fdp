@@ -1,4 +1,3 @@
-import collections
 import json
 from . import url, Route
 from .pdf import Picture, PDF, JSONPDFEncoder
@@ -24,7 +23,12 @@ class Merge(Route):
         for i, page in sorted(order.items()):
             source = loaded_pdfs.get(page.get('pdf'))
             page_number = page.get('id') - 1
+            rotation = page.get('rotation', 0)
             pdf_page = source.getPage(page_number)
+            if rotation:
+                method = ('rotateClockwise' if rotation > 0 else
+                          'rotateCounterClockwise')
+                getattr(pdf_page, method)(abs(rotation))
             writer.addPage(pdf_page)
         _file = BytesIO()
         writer.write(_file)

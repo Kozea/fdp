@@ -89,11 +89,13 @@ $(document).ready(function() {
     },
     receive: function(e, ui) {
       ui.item.addClass('pdf-page');
+      $('.rotate-left:first').clone().removeClass('hidden').prependTo(ui.item);
+      $('.rotate-right:first').clone().removeClass('hidden').appendTo(ui.item);
       return copyHelper = null;
     }
   });
   return $('.download').click(function() {
-    var clean_pdfs_list, element, i, id, img, pages_order, parent, pdf, pdfs_list, thumbnail, _i, _len, _ref;
+    var clean_pdfs_list, element, i, id, img, pages_order, parent, pdf, pdfs_list, rotation, thumbnail, _i, _len, _ref;
     pages_order = {
       pdfs_list: [],
       order: {}
@@ -105,17 +107,18 @@ $(document).ready(function() {
       img = $(element).children('img');
       id = img.data('id');
       parent = img.data('pdf');
+      rotation = Number.parseInt(img.attr('data-rotation')) || 0;
       thumbnail = img.attr('src');
       pdf = new Page(id, i, parent, thumbnail);
       pages_order.order[i] = {
         pdf: parent,
-        id: id
+        id: id,
+        rotation: rotation
       };
       pdfs_list.push(pdf.parent);
     }
     clean_pdfs_list = $.unique(pdfs_list);
     pages_order.pdfs_list = clean_pdfs_list;
-    console.log(pages_order);
     $.ajax({
       url: $(this).data('url'),
       type: 'POST',
@@ -135,6 +138,38 @@ $(document).ready(function() {
       }
     });
   });
+});
+
+$(document).on('click', '.rotate-left', function(e) {
+  var img, rotation;
+  img = $(e.target).siblings('img').first();
+  rotation = img.attr('data-rotation') || 0;
+  rotation = Number.parseInt(rotation);
+  rotation -= 90;
+  rotation = -(Math.abs(rotation) % 360);
+  img.css({
+    "-webkit-transform": "rotate(" + rotation + "deg)",
+    "-moz-transform": "rotate(" + rotation + "deg)",
+    "-ms-transform": "rotate(" + rotation + "deg)",
+    "transform": "rotate(" + rotation + "deg)"
+  });
+  return img.attr('data-rotation', rotation);
+});
+
+$(document).on('click', '.rotate-right', function(e) {
+  var img, rotation;
+  img = $(e.target).siblings('img').first();
+  rotation = img.attr('data-rotation') || 0;
+  rotation = Number.parseInt(rotation);
+  rotation += 90;
+  rotation = rotation % 360;
+  img.css({
+    "-webkit-transform": "rotate(" + rotation + "deg)",
+    "-moz-transform": "rotate(" + rotation + "deg)",
+    "-ms-transform": "rotate(" + rotation + "deg)",
+    "transform": "rotate(" + rotation + "deg)"
+  });
+  return img.attr('data-rotation', rotation);
 });
 
 b64toBlob = function(b64Data, contentType, sliceSize) {
