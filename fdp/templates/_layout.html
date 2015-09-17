@@ -4,13 +4,13 @@
   <head>
     <title>Fdp</title>
     <meta charset="utf-8">
-    <link href="http://fonts.googleapis.com/css?family=Luckiest+Guy|Roboto" rel='stylesheet' type='text/css'>
     <link href="{{ static_url('css/fdp.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ static_url('css/dropzone.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ static_url('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ static_url('css/magnific-popup.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ static_url('css/introjs.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ static_url('css/jquery-ui.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ static_url('css/materialize.min.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Luckiest+Guy" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <body {% if options.debug %}data-debug="true"{% end %}>
@@ -24,6 +24,7 @@
     <script src="{{ static_url('js/deps.min.js') }}"></script>
     <script src="{% if options.debug %}{{ static_url('js/fdp.js') }}{% else %}{{ static_url('js/fdp.min.js') }}{% end %}"></script>
     <script src="{{ static_url('js/dropzone.min.js') }}"></script>
+    <script src="{{ static_url('js/intro.min.js') }}"></script>
 
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
   </body>

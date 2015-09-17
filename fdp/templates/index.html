@@ -1,19 +1,25 @@
 {% extends _layout.html %}
 
 {% block main %}
+  <i class="material-icons help">help</i>
 
   <form action="{{ reverse_url('Upload') }}" class="dropzone" id="uploader">
-    <input type="file" name="file" id="hidden-uploader"/>
+    <input type="file" name="file" id="hidden-uploader" />
   </form>
 
-  <div class="source"></div>
-  <div class="target"></div>
+  <h4>Galerie d’images (faire glisser dessous pour ajouter au pdf final)</h4>
+  <div class="source grey lighten-3" data-intro="Ici se trouve l'ensemble des pdfs ou images uploadées, en faisant glisser l’une des images vers le bas on l'ajoute au pdf généré final" data-step="1" data-position="top">
+  </div>
 
-  <div class="download" data-url="{{ reverse_url('Merge') }}">
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored hidden">
+  <h4>Organisation des pages (faire glisser pour réorganiser)</h4>
+  <div class="target blue lighten-3" data-intro="Ici en faisant glisser un element on peut réorganiser le pdf final" data-step="2" data-position="top">
+  </div>
+
+  <div class="download" data-url="{{ reverse_url('Merge') }}" data-intro="C’est prêt !" data-step="3" data-position="right">
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
       <i class="material-icons">file_download</i>
     </button>
-    <div class="mdl-progress mdl-js-progress hidden"></div>
+    <div class="mdl-progress mdl-js-progress progress-bar hidden"></div>
   </div>
 
   <i class="material-icons rotate-left hidden">rotate_left</i>
