@@ -1,6 +1,7 @@
 import json
 from . import url, Route
 from .pdf import Picture, PDF, JSONPDFEncoder
+from copy import copy
 from io import BytesIO
 from base64 import b64encode
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -21,14 +22,15 @@ class Merge(Route):
             reader = PdfFileReader(pdf)
             loaded_pdfs[pdf] = reader
         for i, page in sorted(order.items()):
-            source = loaded_pdfs.get(page.get('pdf'))
+            # we need a shallow copy here else we get a ref to
+            # the same object if there is a copy of the page
+            source = copy(loaded_pdfs.get(page.get('pdf')))
             page_number = page.get('id') - 1
             rotation = page.get('rotation', 0)
             pdf_page = source.getPage(page_number)
-            if rotation:
-                method = ('rotateClockwise' if rotation > 0 else
-                          'rotateCounterClockwise')
-                getattr(pdf_page, method)(abs(rotation))
+            method = ('rotateClockwise' if rotation > 0 else
+                      'rotateCounterClockwise')
+            getattr(pdf_page, method)(abs(rotation))
             writer.addPage(pdf_page)
         _file = BytesIO()
         writer.write(_file)

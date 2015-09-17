@@ -229,6 +229,34 @@ li i.fa-undo {
   width: 100%;
 }
 
+.source > div, .target > div {
+  float: left;
+  margin: 0 28px;
+  position: relative;
+}
+
+.source > div > img, .target > div > img {
+  height: 100px;
+}
+
+.placeholder {
+  background-color: blue;
+  height: 100px;
+  width: 100px;
+}
+
+.remove-circle, rotate-left, .rotate-right {
+  position: absolute;
+}
+
+.rotate-left, .rotate-right {
+  top: 30px
+}
+
+.material-icons {
+  cursor: pointer;
+}
+
 .download {
   margin: 0 auto;
   width: 60px;

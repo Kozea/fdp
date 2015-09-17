@@ -1,0 +1,19 @@
+{
+  "name": "fdp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Kozea/fdp",
+  "authors": [
+    "Jean-Marc Martins <jean-marc.martins@kozea.fr>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery.shapeshift": "~2.0.0"
+  }
+}
