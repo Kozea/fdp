@@ -41,7 +41,7 @@ class Merge(Route):
         self.write(b64encode(_file.read()))
 
 
-@url('/upload')
+@url(r'/upload')
 class Upload(Route):
     def post(self):
         files = []
