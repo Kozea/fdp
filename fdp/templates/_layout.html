@@ -12,12 +12,7 @@
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Luckiest+Guy" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  </head>
-  <body {% if options.debug %}data-debug="true"{% end %}>
-    <h1>Fdp</h1>
-    <main>
-      {% block main %}{% end %}
-    </main>
+
     <script src="{{ static_url('js/jquery.min.js') }}"></script>
     <script src="{{ static_url('js/jquery-ui.min.js') }}"></script>
     <script src="{{ static_url('js/magnific-popup.min.js') }}"></script>
@@ -27,5 +22,12 @@
     <script src="{{ static_url('js/intro.min.js') }}"></script>
 
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+
+  </head>
+  <body {% if options.debug %}data-debug="true"{% end %}>
+    <h1>Fdp</h1>
+    <main>
+      {% block main %}{% end %}
+    </main>
   </body>
 </html>
